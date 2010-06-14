@@ -14,7 +14,7 @@ Plugin Name:Related Articles
 Plugin URI: http://www.cloudapi.info/
 Description: This plugin provide related articles for each blog aritcle;
 Author: 162cm 
-Version: 1.0
+Version: 1.0.2
 Author URI: http://www.162cm.com/
  */
 /*  Copyright andot (email: xurenlu@gmail.com)
