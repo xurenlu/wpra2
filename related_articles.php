@@ -154,6 +154,9 @@ function ra_index_article($content,$url,$title) {
 
     $rpc=ra_get_rpc();
     $ret=$rpc->api_simple_index(RADB,$url."||##||".$title,strip_tags($content));
+    if(is_a($ret, "PHPRPC_Error")){
+        return false;
+    }
     if($ret["code"]=="200"){
         ra_set_row("indexed_".md5($content),1);
         return true;
@@ -183,6 +186,9 @@ function ra_fetch_articles($content)
         $query=join(" ",$keywords)." ".$post->post_title;
         $rpc=ra_get_rpc();
         $ret=$rpc->api_simple_search(RADB,$query);
+        if(is_a($ret, "PHPRPC_Error")){
+            return $content;
+        }
         if($ret["code"]=="200"){
             $relates=array();
             foreach($ret["data"] as $v){
@@ -248,7 +254,11 @@ function ra_settings()
         update_option("ra.db",trim($_POST["db"]));
         $rpc=ra_get_rpc("http://cloudapi.info/search_api.py?code=".trim($_POST["key"]));
         $rpc->api_simple_init(trim($_POST["db"]));
-        echo '<div style="color:green;padding:50px;">修改成功!        <br>  <br> <a href="'.$_SERVER["REQUEST_URI"].'">返回</a></div>';
+        if(is_a($ret, "PHPRPC_Error")){
+            echo '<div style="color:red;padding:50px;">修改意外失败!        <br>  <br> <a href="'.$_SERVER["REQUEST_URI"].'">返回</a></div>';
+        }
+        else
+            echo '<div style="color:green;padding:50px;">修改成功!        <br>  <br> <a href="'.$_SERVER["REQUEST_URI"].'">返回</a></div>';
 
     }
 
